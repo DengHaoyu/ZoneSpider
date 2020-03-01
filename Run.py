@@ -19,12 +19,12 @@ except FileNotFoundError:
     print("Ooooooooooooooops,cookie.txt 文件丢失，请检查")
     exit()
 
-# if not Network.checkCookieAndRight(uin):
-#     print("Oooooooooooooooops,权限错误，请检查是否有权访问对方空间或者cookie错误")
-#     print("如果您连对方空间都进不了，那我就哈哈哈哈哈哈哈哈哈哈")
-#     for i in range(1,100):
-#         print("疯狂嘲讽哈哈哈哈哈哈哈")
-#     exit()
+if not Network.checkCookieAndRight(uin):
+    print("Oooooooooooooooops,权限错误，请检查是否有权访问对方空间或者cookie错误")
+    print("如果您连对方空间都进不了，那我就哈哈哈哈哈哈哈哈哈哈")
+    for i in range(1,100):
+        print("疯狂嘲讽哈哈哈哈哈哈哈")
+    exit()
 
 print("Emmmmmmmm,似乎一切正常开始工作啦")
 print("输入爬取说说数量(不限量请输入99999)：")
