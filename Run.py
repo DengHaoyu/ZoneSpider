@@ -1,6 +1,38 @@
 import Network
 import Loginfo
 import json
+import shutil
+import os
+import threading
+import DataAnalyze
+import random
+import sys
+MAX_THREADS = 4
+def analyze():
+    files = os.listdir('Catch')
+    lock = threading.Lock()
+    for f in files:
+        while len(DataAnalyze.threadpool)>=MAX_THREADS:
+            pass
+        id = random.randint(1,152522155)
+        while id in DataAnalyze.threadpool:id = random.randint(1,152522155)
+        #防止线程id重复
+        thr = DataAnalyze.Analyze(lock,open('Catch/'+f,'r',encoding='utf-8'),id,f)
+        DataAnalyze.threadpool[id] = thr
+        thr.start()
+
+    visitors = Loginfo.tempTable.values()
+    for i in visitors:
+        Loginfo.sheet.append(i)
+    Loginfo.sheet.writeToExcel()
+
+if len(sys.argv)>1:
+    if sys.argv[1] == '-last' or sys.argv[1] == 'last':
+        print("开始分析上一次结果")
+        analyze()
+        print("分析完成")
+        exit()
+
 
 print("欢迎hxy小仙女使用，祝您撩汉成功")
 print("请再次确定您的cookie正确并且有效QAQ，不然怪不了我2333")
@@ -20,38 +52,34 @@ except FileNotFoundError:
     exit()
 
 if not Network.checkCookieAndRight(uin):
-    print("Oooooooooooooooops,权限错误，请检查是否有权访问对方空间或者cookie错误")
-    print("如果您连对方空间都进不了，那我就哈哈哈哈哈哈哈哈哈哈")
-    for i in range(1,100):
-        print("疯狂嘲讽哈哈哈哈哈哈哈")
-    exit()
+   print("Oooooooooooooooops,权限错误，请检查是否有权访问对方空间或者cookie错误")
+   exit()
 
 print("Emmmmmmmm,似乎一切正常开始工作啦")
 print("输入爬取说说数量(不限量请输入99999)：")
-limit = int(input())
+limit = int(input())+1
 cnt = 0
-while True:
-    print("目前爬取了%d条说说"%cnt)
+if os.path.exists("Catch"):
+    if os.listdir("Catch"):
+        print("Catch文件夹不为空，是否清除（Y/N），如只需统计上一次爬取结果，在运行时加入参数-last")
+        op = input()
+        if op == 'Y':
+            shutil.rmtree('Catch')
+            os.mkdir('Catch')
+        else:
+            exit()
+else:
+    os.mkdir("Catch")
+while limit>0:
     try:
-        tmp = Network.spide(cnt, min(20,limit))
-        limit-=tmp
-    except Network.CookieOutOfDateError:
-        print("Sorry,发生了错误，cookie可能过期了，请更新cookie，如果多次以后还是不行，请联系dhy")
-        print("把已获得的数据储存")
-        visitors = Loginfo.tempTable.values()
-        for i in visitors:
-            Loginfo.sheet.append(i)
-        Loginfo.sheet.writeToExcel()
-        print("Done,即将退出...")
+        Network.spideToCatch(cnt + 1, min(limit, 20))
+        cnt += min(limit, 20) - 1
+        limit -= min(limit, 20)
+        if limit==0:break
+        else : limit+=1
+    except Exception as e:
+        print("Ooooops,爬取说说时发生了错误:",e)
         exit()
-    cnt+=tmp-1
-    if tmp<10 or limit<=0:
-        break
+analyze()
 
-visitors = Loginfo.tempTable.values()
-for i in visitors:
-    Loginfo.sheet.append(i)
-
-
-Loginfo.sheet.writeToExcel()
 print("爬完啦，祝您撩汉成功,爬取了%d条说说"%cnt)

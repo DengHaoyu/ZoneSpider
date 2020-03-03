@@ -4,7 +4,8 @@ import re
 import Loginfo
 import demjson
 import HTMLParse
-
+import os
+import time
 class CookieOutOfDateError(Exception):
     def __init__(self):
         Exception.__init__(self)
@@ -90,16 +91,30 @@ def spide(start, count):
         HTMLParse.countComment(reda[i]['html'])
     return len(res['data']['friend_data'])
 
-def checkCookieAndRight(uin):
+def spideToCatch(start, count):
     data['g_tk'] = str(Loginfo.getg_tk(Loginfo.info.cookie['p_skey']))
-    data['start'] = 0
-    data['count'] = 1
+    data['start'] = start
+    data['count'] = count
     data['uin'] = Loginfo.info.usr
     data['hostuin'] = Loginfo.info.host
     response = requests.get(baseurl + urllib.parse.urlencode(data), headers=headers, cookies=Loginfo.info.cookie)
-    res = loads_jsonp(response.text)
-    if res['code'] != 0:
+    if not os.path.exists('Catch'):
+        os.mkdir('Catch')
+    try:
+        f = open("Catch/"+str(time.time()),'w',encoding='utf-8')
+        time.sleep(1)
+        f.write(response.text)
+    except IOError as e:
+        print("Error has occurred when catching:",e)
+        exit()
+def checkCookieAndRight(uin):
+    url = "https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/user/cgi_personal_card?"
+    data = {
+        'uin': uin,
+        'g_tk': str(Loginfo.getg_tk(Loginfo.info.cookie['p_skey'])),
+    }
+    response = requests.get(url + urllib.parse.urlencode(data), headers=headers, cookies=Loginfo.info.cookie)
+    if not response.status_code == 200:
         return False
-    else:
-        return True
+    return True
 

@@ -1,6 +1,10 @@
 import xlwt
 import os
 import Network
+import threading
+import demjson
+import re
+import HTMLParse
 
 
 class Visitor:
@@ -24,6 +28,46 @@ class Visitor:
         self.nickname = dic['nickname']
         self.isFriend = bool(dic['isFriend'])
 
+
+patt = re.compile(".*?({.*}).*")
+
+
+def loads_jsonp(_jsonp):
+    try:
+        return demjson.decode(re.match(".*?({.*}).*", _jsonp, re.S).group(1))
+    except:
+        raise ValueError('Invalid Input')
+
+
+threadpool = {}
+
+
+class Analyze(threading.Thread):
+    def __init__(self, lock, file, id, filename):
+        threading.Thread.__init__(self)
+        self.lock = lock
+        self.file = file
+        self.id = id
+        self.filename = filename
+
+    def run(self):
+        text = self.file.read()
+        res = loads_jsonp(text)
+        if not res['code'] == 0:
+            print("错误发生，返回代码：%d" % res['code'])
+        try:
+            reda = res['data']['friend_data']
+        except KeyError:
+            print("解析缓存 %s 时出现错误，线程%d退出" % (self.filename, self.id))
+        leng = len(reda)
+
+        for i in range(0, leng - 1):
+            self.lock.acquire()
+            HTMLParse.countLike(reda[i]['html'])
+            HTMLParse.countComment(reda[i]['html'])
+            self.lock.release()
+        self.file.close()
+        del threadpool[self.id]
 
 Item = ['QQ号', 'Nickname', '点赞数', '评论数', '是否是好友', '性别']
 
