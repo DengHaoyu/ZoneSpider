@@ -6,6 +6,7 @@ import demjson
 import HTMLParse
 import os
 import time
+import random
 class CookieOutOfDateError(Exception):
     def __init__(self):
         Exception.__init__(self)
@@ -19,22 +20,23 @@ headers = {
 data = {
     'uin': Loginfo.info.usr,
     'hostuin': Loginfo.info.host,
-    'scope': '0',
-    'filter': 'all',
-    'falg': '1',
-    'refresh': '0',
-    "firstGetGroup": '0',
-    'mixnocache': '0',
-    'scene': '0',
-    'begintime': 'undefined',
-    'icServerTime': '',
+    # 'scope': '0',
+    # 'filter': 'all',
+    # 'falg': '1',
+    # 'refresh': '0',
+    # "firstGetGroup": '0',
+    # 'mixnocache': '0',
+    # 'scene': '0',
+    # 'begintime': 'undefined',
+    # 'icServerTime': '',
     'start': '0',  # 起始下标
     'count': '20',
-    'sidomain': 'qzonestyle.gtimg.cn',
+    # 'sidomain': 'qzonestyle.gtimg.cn',
     'useutf8': '1',
-    'outputhtmlfeed': '1',
-    'format': 'jsonp',
-    # 这里少了一个r参数
+    # 'outputhtmlfeed': '1',
+    # 'format': 'jsonp',
+    # # 这里少了一个r参数
+    'r':'0.5222234387098421',
     'g_tk': '1'
 }
 
@@ -91,22 +93,28 @@ def spide(start, count):
         HTMLParse.countComment(reda[i]['html'])
     return len(res['data']['friend_data'])
 
-def spideToCatch(start, count):
+def spideToCatch(start, count,dep = 1):
+    if dep>5:return
     data['g_tk'] = str(Loginfo.getg_tk(Loginfo.info.cookie['p_skey']))
     data['start'] = start
     data['count'] = count
     data['uin'] = Loginfo.info.usr
     data['hostuin'] = Loginfo.info.host
     response = requests.get(baseurl + urllib.parse.urlencode(data), headers=headers, cookies=Loginfo.info.cookie)
+    # if len(response.text)<1000:
+    #     spideToCatch(start,count,dep+1)
+    #     return
     if not os.path.exists('Catch'):
         os.mkdir('Catch')
     try:
-        f = open("Catch/"+str(time.time()),'w',encoding='utf-8')
+        f = open("Catch/"+str(int(time.time())+random.randint(1,18282828)),'w',encoding='utf-8')
         time.sleep(1)
         f.write(response.text)
     except IOError as e:
         print("Error has occurred when catching:",e)
         exit()
+    print("第%d到%d条说说爬取完毕"%(start,count-1))
+    time.sleep(random.randint(1,20))
 def checkCookieAndRight(uin):
     url = "https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/user/cgi_personal_card?"
     data = {

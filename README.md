@@ -14,6 +14,10 @@ lxml 4.5.0
 
 xlutils 2.0.0
 
+# Require
+
+python >=3.5
+
 # Usage
 
 把有效cookies放到cookies.txt里面，然后

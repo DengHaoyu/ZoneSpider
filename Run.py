@@ -7,6 +7,7 @@ import threading
 import DataAnalyze
 import random
 import sys
+import urllib.request
 MAX_THREADS = 4
 def analyze():
     files = os.listdir('Catch')
@@ -25,16 +26,23 @@ def analyze():
     for i in visitors:
         Loginfo.sheet.append(i)
     Loginfo.sheet.writeToExcel()
-
+last = False
+cloudcookie = False
 if len(sys.argv)>1:
-    if sys.argv[1] == '-last' or sys.argv[1] == 'last':
-        print("开始分析上一次结果")
-        analyze()
-        print("分析完成")
-        exit()
+    for arg in sys.argv:
+        if arg == '-last' or arg == 'last':
+            last = True
+        if arg == 'debug' or arg == '-debug':
+            cloudcookie = True
+
+if last:
+    print("开始分析上一次结果")
+    analyze()
+    print("分析完成")
+    exit()
 
 
-print("欢迎hxy小仙女使用，祝您撩汉成功")
+print("欢迎使用，祝您撩汉成功")
 print("请再次确定您的cookie正确并且有效QAQ，不然怪不了我2333")
 print("现在先输入你的QQ")
 usr = str(input())
@@ -44,20 +52,32 @@ print("OK,现在开始工作啦")
 Loginfo.info.usr = usr
 Loginfo.info.host = uin
 print("先检测一下您cookie是否正确233")
-try:
-    f = open('cookie.txt',"r")
-    Loginfo.info.cookie = json.load(f)
-except FileNotFoundError:
-    print("Ooooooooooooooops,cookie.txt 文件丢失，请检查")
-    exit()
+if cloudcookie:#从github上获取cookie
+    #主要是为了方便部署到香橙片
+    try:
+        conn = urllib.request.urlopen("https://denghaoyu.github.io/cookie.html")
+        Loginfo.info.cookie = json.loads(conn.read())
+    except Exception as e:
+        print("Exception has occurred when getting cookies from github:",e)
+        exit()
+else:
+    try:
+        f = open('cookie.txt', "r")
+        Loginfo.info.cookie = json.load(f)
+    except FileNotFoundError:
+        print("Ooooooooooooooops,cookie.txt 文件丢失，请检查")
+        exit()
 
 if not Network.checkCookieAndRight(uin):
    print("Oooooooooooooooops,权限错误，请检查是否有权访问对方空间或者cookie错误")
    exit()
 
 print("Emmmmmmmm,似乎一切正常开始工作啦")
-print("输入爬取说说数量(不限量请输入99999)：")
+print("输入爬取说说数量(最大40)：")
 limit = int(input())+1
+while limit>40:
+    print("输入爬取说说数量(最大40)：")
+    limit = int(input()) + 1
 cnt = 0
 if os.path.exists("Catch"):
     if os.listdir("Catch"):
@@ -72,7 +92,7 @@ else:
     os.mkdir("Catch")
 while limit>0:
     try:
-        Network.spideToCatch(cnt + 1, min(limit, 20))
+        Network.spideToCatch(cnt + 1, cnt+min(limit, 20))
         cnt += min(limit, 20) - 1
         limit -= min(limit, 20)
         if limit==0:break

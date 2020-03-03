@@ -53,12 +53,14 @@ class Analyze(threading.Thread):
     def run(self):
         text = self.file.read()
         res = loads_jsonp(text)
-        if not res['code'] == 0:
-            print("错误发生，返回代码：%d" % res['code'])
+        if not str(res['code']) == '0':
+            print("错误发生，返回代码：%s" % str(res['code']))
+            return
         try:
             reda = res['data']['friend_data']
         except KeyError:
             print("解析缓存 %s 时出现错误，线程%d退出" % (self.filename, self.id))
+            return
         leng = len(reda)
 
         for i in range(0, leng - 1):

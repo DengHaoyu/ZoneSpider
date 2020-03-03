@@ -1,8 +1,0 @@
-_Callback({
-	"code":0,
-	"subcode":0,
-	"message":"",
-	"default":0,
-	"data":
-{main:{needFold:'',icServerTime:'',icView:'',daylist:'',uinlist:'',hasMoreFeeds_0:false,hasMoreFeeds_1:true,hasMoreFeeds_100:true,foldAllHostBTNClass:'',foldAllHostBTNTitle:'',foldAllHostFeedDisplay:'',friend_more:'',host_more:'',aboutHostFeeds_new_cnt:'',replyHostFeeds_new_cnt:'',myFeeds_new_cnt:'',friendFeeds_new_cnt:'',newfeeds_uinlist:'',newfeeds_uinlist_more:'',newfeeds_special_cnt:'',newfeeds_friend_cnt:'',newfeeds_follow_cnt:'',newfeeds_group_cnt:'',tips:'',feedstips:'',js_showtips:'',lastaccesstime:'',lastAccessRelateTime:'',QzoneFeedsKey:'',offset:'40',which_year:'',pkey:'',total_number:'0'},host_data:[undefined],        about_data:[                                undefined        ],friend_data:[undefined],        firstpage_data:[                                undefined        ]}}
-);
