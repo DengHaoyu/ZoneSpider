@@ -89,7 +89,10 @@ class Sheet:
         col = 1
         self.users.sort()
         for i in self.users:
-            i.spideInfo()
+            try:
+                i.spideInfo()
+            except Exception as e:
+                print("Error when getting gender,omitted")
             sheet.write(col, 0, i.uin)
             sheet.write(col, 1, i.nickname)
             sheet.write(col, 2, i.like)

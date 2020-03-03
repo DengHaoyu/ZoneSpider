@@ -20,7 +20,7 @@ def analyze():
         thr = DataAnalyze.Analyze(lock,open('Catch/'+f,'r',encoding='utf-8'),id,f)
         DataAnalyze.threadpool[id] = thr
         thr.start()
-
+    while len(DataAnalyze.threadpool):pass
     visitors = Loginfo.tempTable.values()
     for i in visitors:
         Loginfo.sheet.append(i)
