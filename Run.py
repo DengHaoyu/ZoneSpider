@@ -56,7 +56,7 @@ if cloudcookie:#从github上获取cookie
     #主要是为了方便部署到香橙片
     try:
         conn = urllib.request.urlopen("https://denghaoyu.github.io/cookie.html")
-        Loginfo.info.cookie = json.loads(conn.read())
+        Loginfo.info.cookie = json.loads(str(conn.read())
     except Exception as e:
         print("Exception has occurred when getting cookies from github:",e)
         exit()
