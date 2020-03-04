@@ -94,6 +94,7 @@ def spide(start, count):
     return len(res['data']['friend_data'])
 
 def spideToCatch(start, count,dep = 1):
+    print("开始爬第%d到%d条说说"%(start,count-1))
     if dep>5:return
     data['g_tk'] = str(Loginfo.getg_tk(Loginfo.info.cookie['p_skey']))
     data['start'] = start
@@ -101,9 +102,9 @@ def spideToCatch(start, count,dep = 1):
     data['uin'] = Loginfo.info.usr
     data['hostuin'] = Loginfo.info.host
     response = requests.get(baseurl + urllib.parse.urlencode(data), headers=headers, cookies=Loginfo.info.cookie)
-    # if len(response.text)<1000:
-    #     spideToCatch(start,count,dep+1)
-    #     return
+    #if len(response.text)<1000:
+    #    spideToCatch(start,count,dep+1)
+    #    return
     if not os.path.exists('Catch'):
         os.mkdir('Catch')
     try:
@@ -112,8 +113,10 @@ def spideToCatch(start, count,dep = 1):
         f.write(response.text)
     except IOError as e:
         print("Error has occurred when catching:",e)
+        response.close()
         exit()
     print("第%d到%d条说说爬取完毕"%(start,count-1))
+    response.close()
     time.sleep(random.randint(1,20))
 def checkCookieAndRight(uin):
     url = "https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/user/cgi_personal_card?"
