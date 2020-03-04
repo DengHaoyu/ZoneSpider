@@ -57,6 +57,7 @@ def getUserInfo(uin):
     }
     response = requests.get(url + urllib.parse.urlencode(data),headers = headers,cookies = Loginfo.info.cookie)
     result = loads_jsonp(response.text)
+    response.close()
     if 'nickname' in result:
         info['nickname'] = result['nickname']
     else:
@@ -126,6 +127,8 @@ def checkCookieAndRight(uin):
     }
     response = requests.get(url + urllib.parse.urlencode(data), headers=headers, cookies=Loginfo.info.cookie)
     if not response.status_code == 200:
+        response.close()
         return False
+    response.close()
     return True
 
