@@ -75,9 +75,6 @@ if not Network.checkCookieAndRight(uin):
 print("Emmmmmmmm,似乎一切正常开始工作啦")
 print("输入爬取说说数量(最大40)：")
 limit = int(input())+1
-while limit>40:
-    print("输入爬取说说数量(最大40)：")
-    limit = int(input()) + 1
 cnt = 0
 if os.path.exists("Catch"):
     if os.listdir("Catch"):
@@ -92,7 +89,7 @@ else:
     os.mkdir("Catch")
 while limit>0:
     try:
-        Network.spideToCatch(cnt + 1, cnt+min(limit, 20))
+        Network.spideToCatch(cnt + 1,min(limit, 20))
         cnt += min(limit, 20) - 1
         limit -= min(limit, 20)
         if limit==0:break
@@ -100,6 +97,7 @@ while limit>0:
     except Exception as e:
         print("Ooooops,爬取说说时发生了错误:",e)
         exit()
+print("开始解析")
 analyze()
 
 print("爬完啦，祝您撩汉成功,爬取了%d条说说"%cnt)

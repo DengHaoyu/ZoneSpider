@@ -14,14 +14,13 @@
     "qz_screen":"1536x864",
     "randomSeed":"177299",
     "scstat":"3",
-    "cpu_performance_v8":"30",
-    "_qpsvr_localtk":"0.13244838563138495",
-    "pgv_si":"s4293853184",
-    "pgv_info":"ssid=s2288011776",
+    "Loading":"Yes",
+    "cpu_performance_v8":"27",
+    "pgv_si":"s2519450624",
+    "_qpsvr_localtk":"0.13852299974772753",
     "uin":"o1724458359",
     "skey":"@I9yQlPx6r",
     "p_uin":"o1724458359",
-    "pt4_token":"kh63fAT5-uHajgKIzOmxDrCxNcSJT4cRPwIYtxXWueI_",
-    "p_skey":"qF2Up5qIZ9GVDk5QPg*CXtvU8clv6Ulezosp6F3Cssc_",
-    "Loading":"Yes"
+    "pt4_token":"-DLQS0q20mw47av-Y8bfE*q1fdojt4p1xuCWAuyrDrI_",
+    "p_skey":"bOU4-7AArZC6NFGJ1NVSlH3a8WXx7vhm4LTYgwt7IIU_"
 }
